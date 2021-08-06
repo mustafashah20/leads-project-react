@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useReducer } from 'react'
 import axios from 'axios';
 
 export default function CreateLead(props) {
@@ -10,6 +10,7 @@ export default function CreateLead(props) {
     const [broadcastStatus, setBroadcastStatus] = useState(false);
     const [createdBy, setCreatedBy] = useState('');
 
+
     useEffect(() => {
         const temp = localStorage.getItem('logged-in-user');
         const data = JSON.parse(temp);
@@ -17,6 +18,8 @@ export default function CreateLead(props) {
 
         // eslint-disable-next-line
     }, [])
+
+
 
     const onChangeLeadName = (e) => {
         setLeadName(e.target.value);
@@ -52,8 +55,6 @@ export default function CreateLead(props) {
     }
 
     const onSubmit = (e) => {
-        e.preventDefault();
-
         const lead = {
             name: leadName,
             company: leadCompany,
@@ -118,7 +119,7 @@ export default function CreateLead(props) {
                     <div className="col-3 form-group mt-3">
                         <div className="row">
                             <div className="col-auto">
-                            <div class="form-check form-switch">
+                                <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="flexSwitchConversion" onChange={onConversionChange} />
                                     <label class="form-check-label" for="flexSwitchConversion">Conversion Status</label>
                                 </div>
