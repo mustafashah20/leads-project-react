@@ -51,7 +51,7 @@ export default function Login() {
                 </div>
                 <div className="form-group mt-3">
                     <label>Password</label>
-                    <input type="text"
+                    <input type="password"
                         required
                         className="form-control"
                         value={password}

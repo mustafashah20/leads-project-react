@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom'
 
 export default function Home() {
 
+    const [lead, setLead] = useState(null);
     const [userLoggedIn, setUserLoggedIn] = useState(false)
     const history = useHistory()
 
@@ -15,11 +16,17 @@ export default function Home() {
         else {
             history.push('/');
         }
+        // eslint-disable-next-line
     }, [])
 
     const onLogout = () => {
         localStorage.removeItem('logged-in-user');
         history.push('/');
+    }
+
+    const handleChildCallback = (leadObj) => {
+        setLead(leadObj)
+        console.log(leadObj)
     }
 
     return (
@@ -34,8 +41,8 @@ export default function Home() {
                             </button>
                         </div>
                     </div>
-                    <CreateLead />
-                    <MainList />
+                    <CreateLead parentCallback={handleChildCallback}/>
+                    <MainList newLead={lead}/>
                 </div>
             }
         </div>

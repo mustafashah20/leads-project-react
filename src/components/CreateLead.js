@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 
-export default function CreateLead() {
+export default function CreateLead(props) {
 
     const [leadName, setLeadName] = useState('');
     const [leadCompany, setLeadCompany] = useState('');
@@ -9,6 +9,14 @@ export default function CreateLead() {
     const [conversionStatus, setConversionStatus] = useState(false);
     const [broadcastStatus, setBroadcastStatus] = useState(false);
     const [createdBy, setCreatedBy] = useState('');
+
+    useEffect(() => {
+        const temp = localStorage.getItem('logged-in-user');
+        const data = JSON.parse(temp);
+        setCreatedBy(data.username);
+
+        // eslint-disable-next-line
+    }, [])
 
     const onChangeLeadName = (e) => {
         setLeadName(e.target.value);
@@ -27,9 +35,7 @@ export default function CreateLead() {
     }
 
     const onConversionChange = (e) => {
-        e.persist()
-
-        if (e.target.value === 'true') {
+        if (e.target.checked) {
             setConversionStatus(true);
         }
         else {
@@ -37,9 +43,7 @@ export default function CreateLead() {
         }
     }
     const onBroadcastChange = (e) => {
-        e.persist()
-
-        if (e.target.value === 'true') {
+        if (e.target.checked) {
             setBroadcastStatus(true);
         }
         else {
@@ -63,6 +67,8 @@ export default function CreateLead() {
             .then(res => {
                 console.log(res.data);
             })
+
+        props.parentCallback(lead);
     }
 
     return (
@@ -111,28 +117,22 @@ export default function CreateLead() {
 
                 <div className="row">
                     <div className="col-3 form-group mt-3">
-                        <label>Conversion Status</label>
                         <div className="row">
-                            <div className="col-auto" onChange={onConversionChange}>
-                                <div>
-                                    <input type="radio" value="true" name="conversion" /> Converted
-                                </div>
-                                <div>
-                                    <input type="radio" value="false" name="conversion" checked /> Not Converted
+                            <div className="col-auto">
+                            <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchConversion" onChange={onConversionChange} />
+                                    <label class="form-check-label" for="flexSwitchConversion">Cconversion Status</label>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div className="col-3 form-group mt-3">
-                        <label>Broadast Status</label>
                         <div className="row">
-                            <div className="col-auto" onChange={onBroadcastChange}>
-                                <div>
-                                    <input type="radio" value="true" name="broadcast" /> Yes
-                                </div>
-                                <div>
-                                    <input type="radio" value="false" name="broadcast" checked /> No
+                            <div className="col-auto">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchBroadcast" onChange={onBroadcastChange} />
+                                    <label class="form-check-label" for="flexSwitchBroadcast">Broadcast Status</label>
                                 </div>
                             </div>
                         </div>

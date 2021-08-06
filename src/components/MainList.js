@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
 
-export default function MainList() {
+export default function MainList({ newLead }) {
 
     const [leads, setLeads] = useState([]);
     const [logedUser, setLogedUser] = useState('');
@@ -10,10 +10,17 @@ export default function MainList() {
     const fetchLeads = () => {
         axios.get('http://localhost:5000/lead/')
             .then(res => {
-                console.log(res.data);
                 setLeads(res.data);
             })
     }
+
+    useEffect(() => {
+        if (newLead) {
+            const array = leads
+            array.push(newLead)
+            setLeads([...array]);
+        }
+    }, [newLead])
 
     useEffect(() => {
         const data = localStorage.getItem('logged-in-user')
@@ -25,10 +32,6 @@ export default function MainList() {
         fetchLeads();
     }, [])
 
-    const updateLeads = () => {
-        window.location.reload();
-    }
-
     const toggleConversion = (leadId, e) => {
         if (e.target.checked) {
             const lead = {
@@ -36,7 +39,10 @@ export default function MainList() {
             }
             axios.patch(`http://localhost:5000/lead/${leadId}`, lead)
                 .then(res => {
-                    console.log(res.data);
+                    const objIndex = leads.findIndex((obj) => obj._id === leadId);
+                    const array = leads
+                    array[objIndex].conversionStatus = true;
+                    setLeads([...array]);
                 })
         }
         else {
@@ -45,10 +51,12 @@ export default function MainList() {
             }
             axios.patch(`http://localhost:5000/lead/${leadId}`, lead)
                 .then(res => {
-                    console.log(res.data);
+                    const objIndex = leads.findIndex((obj) => obj._id === leadId);
+                    const array = leads
+                    array[objIndex].conversionStatus = false;
+                    setLeads([...array]);
                 })
         }
-        updateLeads();
     }
 
     const toggleBroadcast = (leadId, e) => {
@@ -58,20 +66,24 @@ export default function MainList() {
             }
             axios.patch(`http://localhost:5000/lead/${leadId}`, lead)
                 .then(res => {
-                    console.log(res.data);
+                    const objIndex = leads.findIndex((obj) => obj._id === leadId);
+                    const array = leads
+                    array[objIndex].broadcastStatus = true;
+                    setLeads([...array]);
                 })
         }
         else {
-
             const lead = {
                 broadcastStatus: false
             }
             axios.patch(`http://localhost:5000/lead/${leadId}`, lead)
                 .then(res => {
-                    console.log(res.data);
+                    const objIndex = leads.findIndex((obj) => obj._id === leadId);
+                    const array = leads
+                    array[objIndex].broadcastStatus = false;
+                    setLeads([...array]);
                 })
         }
-        updateLeads();
     }
 
     return (
@@ -114,7 +126,7 @@ export default function MainList() {
             <h3 className="mt-3">Broadcast List</h3>
             {
                 leads.length > 0 &&
-                <ul className="list-group">
+                <ul className="list-group mb-3">
                     {
                         leads.map(lead =>
                             (lead.broadcastStatus === true) ?
