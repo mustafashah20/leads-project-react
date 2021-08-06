@@ -30,7 +30,7 @@ export default function Login() {
         for (let i = 0; i < users.length; i++) {
             if (username === users[i].username && password === users[i].password) {
                 localStorage.setItem('logged-in-user', JSON.stringify(users[i]));
-                history.push('/');
+                history.push('/home');
                 break;
             }
         }
