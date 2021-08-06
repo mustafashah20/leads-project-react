@@ -66,9 +66,8 @@ export default function CreateLead(props) {
         axios.post('http://localhost:5000/lead/create', lead)
             .then(res => {
                 console.log(res.data);
+                props.parentCallback(lead);
             })
-
-        props.parentCallback(lead);
     }
 
     return (
@@ -121,7 +120,7 @@ export default function CreateLead(props) {
                             <div className="col-auto">
                             <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="flexSwitchConversion" onChange={onConversionChange} />
-                                    <label class="form-check-label" for="flexSwitchConversion">Cconversion Status</label>
+                                    <label class="form-check-label" for="flexSwitchConversion">Conversion Status</label>
                                 </div>
                             </div>
                         </div>

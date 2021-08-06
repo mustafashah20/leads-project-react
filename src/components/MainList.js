@@ -32,6 +32,16 @@ export default function MainList({ newLead }) {
         fetchLeads();
     }, [])
 
+    const onDeleteClicked = (leadId) => {
+        axios.delete(`http://localhost:5000/lead/${leadId}`)
+            .then(res => {
+                const objIndex = leads.findIndex((obj) => obj._id === leadId);
+                const array = leads
+                array.splice(objIndex, 1);
+                setLeads([...array]);
+            });
+    }
+
     const toggleConversion = (leadId, e) => {
         if (e.target.checked) {
             const lead = {
@@ -114,6 +124,11 @@ export default function MainList({ newLead }) {
                                                 <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked2" onChange={(e) => toggleBroadcast(`${lead._id}`, e)} checked={lead.broadcastStatus} />
                                                 <label class="form-check-label" for="flexSwitchCheckChecked">Broadcast Status</label>
                                             </div>
+                                        </div>
+                                        <div className="col-auto">
+                                            <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => onDeleteClicked(lead._id)}>
+                                                delete
+                                            </button>
                                         </div>
 
                                     </div>
